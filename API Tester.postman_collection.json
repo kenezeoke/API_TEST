@@ -1,0 +1,350 @@
+{
+	"info": {
+		"_postman_id": "cfca7bfa-6d05-4dd7-a7e1-87d261c9aee5",
+		"name": "API Tester",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "17246245"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"kenyy@yahoo.com\",\n    \"password\": \"Hey2025\",\n    \"passwordConfirmation\": \"Hey2025\",\n    \"name\": \"sandra\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{endpoint}}/api/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.accessToken);",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{endpoint}}/api/sessions"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Note",
+			"item": [
+				{
+					"name": "Create Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"noteId\", jsonData.noteId);",
+									"",
+									"",
+									"const newAccessToken = responseHeaders['x-access-token']",
+									"",
+									"if(newAccessToken){",
+									"    console.log('Set new access token')",
+									"postman.setEnvironmentVariable(\"accessToken\", newAccessToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"life in france\",\n    \"description\": \"Hello hows life\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{endpoint}}/api/notes"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"A post title\",\n    \"body\": \"Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{endpoint}}/api/notes/{{noteId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const newAccessToken = responseHeaders['x-access-token']",
+									"",
+									"if(newAccessToken){",
+									"    console.log('Set new access token')",
+									"postman.setEnvironmentVariable(\"accessToken\", newAccessToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"life in france\",\n    \"description\": \"Hello hows life\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{endpoint}}/api/notes/{{noteId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const newAccessToken = responseHeaders['x-access-token']",
+									"",
+									"if(newAccessToken){",
+									"    console.log('Set new access token')",
+									"postman.setEnvironmentVariable(\"accessToken\", newAccessToken);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{accessToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"A post title\",\n    \"body\": \"Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text Some HTML text\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{endpoint}}/api/notes/{{noteId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Notes",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Search Notes",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "SHARE TO USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"life in france\",\r\n    \"description\": \"Hello hows life\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/notes/:id/share",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								":id",
+								"share"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{accessToken}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "email",
+			"value": "test@example.com"
+		},
+		{
+			"key": "password",
+			"value": "Password456!"
+		},
+		{
+			"key": "name",
+			"value": "Jane Doe"
+		},
+		{
+			"key": "accessToken",
+			"value": "<accessToken will be set when you create a session>"
+		},
+		{
+			"key": "refreshToken",
+			"value": "<refreshToken will be set when you create a session>"
+		},
+		{
+			"key": "endpoint",
+			"value": "http://localhost:3030"
+		},
+		{
+			"key": "noteId",
+			"value": "<noteId will be set when you create a session>"
+		}
+	]
+}
